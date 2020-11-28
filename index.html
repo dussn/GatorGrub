@@ -217,7 +217,6 @@
     // example {id:1592304983049, title: 'Deadpool', year: 2015}
     const addMovie = (ev)=>{
         ev.preventDefault();  //to stop the form submitting
-
         var city = document.getElementById('city').value;
         var state = document.getElementById('state').value;
         var region = document.getElementById('region').value;
@@ -226,21 +225,68 @@
         var takeout = document.querySelector('input[name="takeout"]:checked').value;
         var delivery = document.querySelector('input[name="delivery"]:checked').value;
         var attire = document.querySelector('input[name="attire"]:checked').value;
-
-        if( city == 'Melbourne'){
-          let movie = {
-            city: city,
-            state: state,
-            region: region,
-            foodtype: foodtype,
-            restauranttype: restauranttype,
-            takeout: takeout,
-            delivery: delivery,
-            attire: attire
-
-          }
-
-
+        
+        var passRegion = false;
+        var passFoodtype = false;
+        var passRestaurantatype = false;
+        
+        var categories = "";
+        if(region.length === 0)
+        {
+            passRegion = true;
+        }
+        if(foodtype.length === 0)
+        {
+            passFoodtype = true;
+        }
+        if(restauranttype.length === 0)
+        {
+            passRestaurantatype = true;
+        }
+        if(!passRegion || !passFoodtype || !passRestaurantatype){
+            if(!passRegion)
+            {
+                var r = regions.split(", ");
+                var i;
+                passRegion = true;
+                for (i = 0; i < r.length; i++) {
+                    if(r[i].includes(',') {
+                        passRegion = false;
+                        break;
+                    }
+                }
+                if(passRegion) categories += regions + ","
+            }
+            if(!passFoodtype){
+                var f = foodtype.split(", ");
+                var i;
+                passFoodtype = true;
+                for (i = 0; i < f.length; i++) {
+                    if(f[i].includes(',') {
+                        passFoodtype = false;
+                        break;
+                    }
+                }
+                if(passFoodtype) categories += " " + foodtype + ","
+            }
+            if(!passRestaurantatype){
+                var r = restauranttype.split(", ");
+                var i;
+                passRestaurantatype = true;
+                for (i = 0; i < r.length; i++) {
+                    if(r[i].includes(',') {
+                        passRestaurantatype = false;
+                        break;
+                    }
+                }
+                if(passRestaurantatype){
+                    categories += " " + restauranttype
+                }
+            }
+        }
+        
+        let movie = {
+            categories: categories
         }
         movies.push(movie);
         document.forms[0].reset(); // to clear the form for the next entries
